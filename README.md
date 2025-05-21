@@ -2,9 +2,10 @@ Hello, so first of all a couple of assumptions and a little walkthrough through 
 
 - we only take care of the score, nothing else like time, yellow cards matters,
 - do I want to have menu-like functionality to see how the scoreboard behaves in real-time or only tests,
+- does summary consist of only finished games? I assume that is does not.
 
 I have two classes:
-Match:
+GameModel:
   -homeTeam
   -awayTeam
   -homeTeamGoals
@@ -12,7 +13,7 @@ Match:
   -timestamp
 
 ScoreBoard:
-  -Map<String, Match> matches
+  -Map<String, GameModel> games
   -startGame()
   -finishGame()
   -updateGame()
