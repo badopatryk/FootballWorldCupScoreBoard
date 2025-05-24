@@ -66,4 +66,9 @@ public class GameModel {
     public int hashCode() {
         return Objects.hash(homeTeam, awayTeam);
     }
+
+    @Override
+    public String toString() {
+        return homeTeam + " " + homeTeamGoals + " - " + awayTeam + " " + awayTeamGoals;
+    }
 }
