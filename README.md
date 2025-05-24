@@ -4,6 +4,8 @@ Hello, so first of all a couple of assumptions and a little walkthrough through 
 - do I want to have menu-like functionality to see how the scoreboard behaves in real-time or only tests,
 - does summary consist of only finished games? I assume that is does not.
 
+- do I want to use LinkedHashSet and sort games while adding or I prefer using HashSet and sort only during getSummary()
+
 I have two classes:
 GameModel:
   -homeTeam
