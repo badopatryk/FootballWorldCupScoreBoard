@@ -33,6 +33,10 @@ public class GameModel {
         this.awayTeamGoals = newAwayTeamGoals;
     }
 
+    public int getTotalScore() {
+        return homeTeamGoals + awayTeamGoals;
+    }
+
     private void validateNewScore(int newHomeTeamGoals, int newAwayTeamGoals) {
         if(newHomeTeamGoals < 0 || newAwayTeamGoals < 0){
             throw new IllegalArgumentException("New score cannot be lower than zero!");
