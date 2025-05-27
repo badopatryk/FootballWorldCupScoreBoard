@@ -3,27 +3,27 @@ package org.example.service;
 import org.example.model.GameModel;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 public class ScoreBoardService {
     private HashSet<GameModel> games = new HashSet<>();
 
     public void startGame(GameModel game) {
-        if (checkIfGameStarted(game))
+        if (isGameStarted(game))
             throw new IllegalArgumentException("Game has already started!");
 
+        game.setTimestamp();
         games.add(game);
     }
 
     public void finishGame(GameModel game) {
-        if (!checkIfGameStarted(game))
+        if (!isGameStarted(game))
             throw new IllegalArgumentException("Game has not started yet!");
 
         games.remove(game);
     }
 
     public void updateGame(GameModel game, int homeTeamScore, int awayTeamScore) {
-        if (!checkIfGameStarted(game))
+        if (!isGameStarted(game))
             throw new IllegalArgumentException("You cannot edit a game that has not started yet!");
 
         game.updateScore(homeTeamScore, awayTeamScore);
@@ -37,13 +37,7 @@ public class ScoreBoardService {
                 .toList();
     }
 
-    public Optional<GameModel> findGame(GameModel game) {
-        return games.stream()
-                .filter(a -> a.equals(game))
-                .findFirst();
-    }
-
-    private boolean checkIfGameStarted(GameModel game) {
+    public boolean isGameStarted(GameModel game) {
         return games.contains(game);
     }
 }

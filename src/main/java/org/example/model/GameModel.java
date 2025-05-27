@@ -1,9 +1,6 @@
 package org.example.model;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -14,7 +11,8 @@ public class GameModel {
     private final String awayTeam;
     private int homeTeamGoals;
     private int awayTeamGoals;
-    private final LocalDateTime timestamp;
+    @Setter(AccessLevel.PACKAGE)
+    private LocalDateTime timestamp;
 
     public GameModel(String homeTeam, String awayTeam) {
         validateTeamNames(homeTeam, awayTeam);
@@ -23,14 +21,20 @@ public class GameModel {
         this.awayTeam = awayTeam;
         this.homeTeamGoals = 0;
         this.awayTeamGoals = 0;
-        this.timestamp = LocalDateTime.now();
     }
 
-    public void updateScore(int newHomeTeamGoals, int newAwayTeamGoals){
+    public void updateScore(int newHomeTeamGoals, int newAwayTeamGoals) {
         validateNewScore(newHomeTeamGoals, newAwayTeamGoals);
 
         this.homeTeamGoals = newHomeTeamGoals;
         this.awayTeamGoals = newAwayTeamGoals;
+    }
+
+    public void setTimestamp() {
+        if (this.timestamp != null) {
+            throw new IllegalStateException("Game already started!");
+        }
+        this.timestamp = LocalDateTime.now();
     }
 
     public int getTotalScore() {
@@ -38,10 +42,10 @@ public class GameModel {
     }
 
     private void validateNewScore(int newHomeTeamGoals, int newAwayTeamGoals) {
-        if(newHomeTeamGoals < 0 || newAwayTeamGoals < 0){
+        if (newHomeTeamGoals < 0 || newAwayTeamGoals < 0) {
             throw new IllegalArgumentException("New score cannot be lower than zero!");
         }
-        if(newHomeTeamGoals < this.homeTeamGoals || newAwayTeamGoals < this.awayTeamGoals){
+        if (newHomeTeamGoals < this.homeTeamGoals || newAwayTeamGoals < this.awayTeamGoals) {
             throw new IllegalArgumentException("New score cannot be lower than existing one!");
         }
     }
