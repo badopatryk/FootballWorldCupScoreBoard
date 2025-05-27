@@ -1,25 +1,28 @@
 package org.example.service;
 
+import lombok.AllArgsConstructor;
 import org.example.model.GameModel;
+import org.example.repository.GameRepository;
 
 import java.util.*;
 
+@AllArgsConstructor
 public class ScoreBoardService {
-    private HashSet<GameModel> games = new HashSet<>();
+    private final GameRepository gameRepository;
 
     public void startGame(GameModel game) {
         if (isGameStarted(game))
             throw new IllegalArgumentException("Game has already started!");
 
         game.setTimestamp();
-        games.add(game);
+        gameRepository.save(game);
     }
 
     public void finishGame(GameModel game) {
         if (!isGameStarted(game))
             throw new IllegalArgumentException("Game has not started yet!");
 
-        games.remove(game);
+        gameRepository.remove(game);
     }
 
     public void updateGame(GameModel game, int homeTeamScore, int awayTeamScore) {
@@ -30,7 +33,7 @@ public class ScoreBoardService {
     }
 
     public List<GameModel> getSummary() {
-        return games.stream()
+        return gameRepository.findAll().stream()
                 .sorted(Comparator
                         .comparing(GameModel::getTotalScore, Comparator.reverseOrder())
                         .thenComparing(GameModel::getTimestamp, Comparator.reverseOrder()))
@@ -38,6 +41,8 @@ public class ScoreBoardService {
     }
 
     public boolean isGameStarted(GameModel game) {
-        return games.contains(game);
+        Optional<GameModel> gameModel = gameRepository.find(game);
+
+        return gameModel.isPresent();
     }
 }

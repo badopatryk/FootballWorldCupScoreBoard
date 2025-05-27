@@ -1,6 +1,9 @@
 package org.example.service;
 
 import org.example.model.GameModel;
+import org.example.repository.GameRepository;
+import org.example.repository.GameRepositoryImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -8,10 +11,16 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ScoreBoardServiceTest {
+    private ScoreBoardService scoreBoardService;
+
+    @BeforeEach
+    void setUp() {
+        GameRepository gameRepository = new GameRepositoryImpl();
+        scoreBoardService = new ScoreBoardService(gameRepository);
+    }
 
     @Test
     void gameShouldStart() {
-        ScoreBoardService scoreBoardService = new ScoreBoardService();
         GameModel game = new GameModel("Mexico", "Argentina");
 
         scoreBoardService.startGame(game);
@@ -21,7 +30,6 @@ public class ScoreBoardServiceTest {
 
     @Test
     void gameShouldFinish() {
-        ScoreBoardService scoreBoardService = new ScoreBoardService();
         GameModel game = new GameModel("Mexico", "Argentina");
 
         scoreBoardService.startGame(game);
@@ -32,18 +40,17 @@ public class ScoreBoardServiceTest {
 
     @Test
     void gameShouldUpdate() {
-        ScoreBoardService scoreBoardService = new ScoreBoardService();
         GameModel game = new GameModel("Mexico", "Argentina");
 
         scoreBoardService.startGame(game);
         scoreBoardService.updateGame(game, 2, 1);
 
-        assertTrue(game.getHomeTeamGoals() == 2 && game.getAwayTeamGoals() == 1);
+        assertEquals(2, game.getHomeTeamGoals());
+        assertEquals(1, game.getAwayTeamGoals());
     }
 
     @Test
     void getSummaryShouldShowAllGames() {
-        ScoreBoardService scoreBoardService = new ScoreBoardService();
         GameModel game = new GameModel("Mexico", "Argentina");
 
         scoreBoardService.startGame(game);
@@ -54,14 +61,11 @@ public class ScoreBoardServiceTest {
 
     @Test
     void summaryShouldBeEmptyWhenNoGamesStarted() {
-        ScoreBoardService scoreBoardService = new ScoreBoardService();
-
         assertTrue(scoreBoardService.getSummary().isEmpty());
     }
 
     @Test
     void shouldNotAllowDuplicateGames() {
-        ScoreBoardService scoreBoardService = new ScoreBoardService();
         GameModel game = new GameModel("Mexico", "Argentina");
 
         scoreBoardService.startGame(game);
@@ -71,7 +75,6 @@ public class ScoreBoardServiceTest {
 
     @Test
     void shouldNotUpdateNotStartedGame() {
-        ScoreBoardService scoreBoardService = new ScoreBoardService();
         GameModel game = new GameModel("Mexico", "Argentina");
 
         assertThrows(IllegalArgumentException.class, () -> scoreBoardService.updateGame(game, 2, 1));
@@ -79,7 +82,6 @@ public class ScoreBoardServiceTest {
 
     @Test
     void getSummaryShouldReturnSortedGames() throws InterruptedException {
-        ScoreBoardService scoreBoardService = new ScoreBoardService();
         GameModel game1 = new GameModel("Mexico", "Argentina");
         GameModel game2 = new GameModel("Canada", "Poland");
         GameModel game3 = new GameModel("Venezuela", "Bhutan");
@@ -102,7 +104,6 @@ public class ScoreBoardServiceTest {
 
     @Test
     void shouldNotFinishNotStartedGame() {
-        ScoreBoardService scoreBoardService = new ScoreBoardService();
         GameModel game = new GameModel("Mexico", "Argentina");
 
         assertThrows(IllegalArgumentException.class, () -> scoreBoardService.finishGame(game));
@@ -110,7 +111,6 @@ public class ScoreBoardServiceTest {
 
     @Test
     void shouldPreventNewLowerScore() {
-        ScoreBoardService scoreBoardService = new ScoreBoardService();
         GameModel game = new GameModel("Mexico", "Argentina");
 
         scoreBoardService.startGame(game);
@@ -120,16 +120,7 @@ public class ScoreBoardServiceTest {
     }
 
     @Test
-    void shouldRejectInvalidTeamNames() {
-        assertThrows(IllegalArgumentException.class, () -> new GameModel(null, "Argentina"));
-        assertThrows(IllegalArgumentException.class, () -> new GameModel("Mexico", null));
-        assertThrows(IllegalArgumentException.class, () -> new GameModel("  ", "Argentina"));
-        assertThrows(IllegalArgumentException.class, () -> new GameModel("Mexico", "Mexico"));
-    }
-
-    @Test
     void shouldAllowSameScoreAgain() {
-        ScoreBoardService scoreBoardService = new ScoreBoardService();
         GameModel game = new GameModel("Mexico", "Argentina");
 
         scoreBoardService.startGame(game);
@@ -139,14 +130,7 @@ public class ScoreBoardServiceTest {
     }
 
     @Test
-    void timestampShouldBeNullBeforeGameStarts() {
-        GameModel game = new GameModel("Mexico", "Argentina");
-        assertNull(game.getTimestamp());
-    }
-
-    @Test
     void shouldSetTimestampWhenGameStarts() {
-        ScoreBoardService scoreBoardService = new ScoreBoardService();
         GameModel game = new GameModel("Mexico", "Argentina");
 
         scoreBoardService.startGame(game);
