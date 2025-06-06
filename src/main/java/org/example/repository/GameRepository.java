@@ -10,7 +10,9 @@ public interface GameRepository {
 
     void remove(GameModel game);
 
+    Optional<GameModel> findByIndex(int index);
     Optional<GameModel> find(GameModel game);
 
     List<GameModel> findAll();
+    List<GameModel> getAllGamesSortedByScoreAndTimestamp();
 }

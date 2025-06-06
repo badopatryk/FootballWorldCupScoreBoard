@@ -1,65 +1,36 @@
 package org.example.model;
 
-import lombok.*;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
 public class GameModel {
-    private final String homeTeam;
-    private final String awayTeam;
+    private final TeamModel homeTeam;
+    private final TeamModel awayTeam;
     private int homeTeamGoals;
     private int awayTeamGoals;
-    @Setter(AccessLevel.PACKAGE)
     private LocalDateTime timestamp;
 
-    public GameModel(String homeTeam, String awayTeam) {
-        validateTeamNames(homeTeam, awayTeam);
-
+    public GameModel(TeamModel homeTeam, TeamModel awayTeam) {
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.homeTeamGoals = 0;
         this.awayTeamGoals = 0;
     }
 
-    public void updateScore(int newHomeTeamGoals, int newAwayTeamGoals) {
-        validateNewScore(newHomeTeamGoals, newAwayTeamGoals);
-
-        this.homeTeamGoals = newHomeTeamGoals;
-        this.awayTeamGoals = newAwayTeamGoals;
-    }
-
     public void setTimestamp() {
-        if (this.timestamp != null) {
-            throw new IllegalStateException("Game already started!");
-        }
         this.timestamp = LocalDateTime.now();
     }
 
+    public void setScore(int homeTeamGoals, int awayTeamGoals) {
+        this.homeTeamGoals = homeTeamGoals;
+        this.awayTeamGoals = awayTeamGoals;
+    }
+
     public int getTotalScore() {
-        return homeTeamGoals + awayTeamGoals;
-    }
-
-    private void validateNewScore(int newHomeTeamGoals, int newAwayTeamGoals) {
-        if (newHomeTeamGoals < 0 || newAwayTeamGoals < 0) {
-            throw new IllegalArgumentException("New score cannot be lower than zero!");
-        }
-        if (newHomeTeamGoals < this.homeTeamGoals || newAwayTeamGoals < this.awayTeamGoals) {
-            throw new IllegalArgumentException("New score cannot be lower than existing one!");
-        }
-    }
-
-    private void validateTeamNames(String homeTeam, String awayTeam) {
-        if (homeTeam == null || awayTeam == null) {
-            throw new IllegalArgumentException("Home and away teams have to be present!");
-        }
-        if (homeTeam.isBlank() || awayTeam.isBlank()) {
-            throw new IllegalArgumentException("Home and away teams cannot be blank!");
-        }
-        if (homeTeam.equals(awayTeam)) {
-            throw new IllegalArgumentException("Home and away teams must be different!");
-        }
+        return this.homeTeamGoals + this.awayTeamGoals;
     }
 
     @Override
