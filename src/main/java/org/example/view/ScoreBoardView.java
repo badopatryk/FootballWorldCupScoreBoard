@@ -56,7 +56,7 @@ public class ScoreBoardView {
         } else {
             try {
                 GameModel game = gameById.get();
-                gameService.updateGame(game, homeTeamNewScore, awayTeamNewScore);
+                gameService.updateGame(game.getId(), homeTeamNewScore, awayTeamNewScore);
             } catch (IllegalArgumentException e) {
                 System.out.println("Failed to update the game: " + e.getMessage());
             }
@@ -90,7 +90,7 @@ public class ScoreBoardView {
         } else {
             try {
                 GameModel game = gameById.get();
-                gameService.finishGame(game);
+                gameService.finishGame(game.getId());
             } catch (IllegalArgumentException e) {
                 System.out.println("Failed to finish game: " + e.getMessage());
             }
@@ -102,7 +102,7 @@ public class ScoreBoardView {
         gameService.getSummary().forEach(System.out::println);
     }
 
-    private void showPossibleActions() { // could be enum
+    private void showPossibleActions() {
 
         System.out.println("1. Start game");
         System.out.println("2. Update score");

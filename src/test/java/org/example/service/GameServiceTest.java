@@ -51,7 +51,7 @@ public class GameServiceTest {
         GameModel game = new GameModel(new TeamModel("Mexico"), new TeamModel("Argentina"));
 
         gameService.startGame(game);
-        gameService.finishGame(game);
+        gameService.finishGame(game.getId());
 
         assertFalse(gameService.isGameOngoing(game));
     }
@@ -61,7 +61,7 @@ public class GameServiceTest {
         GameModel game = new GameModel(new TeamModel("Mexico"), new TeamModel("Argentina"));
 
         gameService.startGame(game);
-        gameService.updateGame(game, 2, 1);
+        gameService.updateGame(game.getId(), 2, 1);
 
         assertEquals(2, game.getHomeTeamGoals());
         assertEquals(1, game.getAwayTeamGoals());
@@ -72,7 +72,7 @@ public class GameServiceTest {
         GameModel game = new GameModel(new TeamModel("Mexico"), new TeamModel("Argentina"));
 
         gameService.startGame(game);
-        GameModel firstGameInSummary = gameService.getSummary().getFirst();
+        GameModel firstGameInSummary = gameService.getSummary().get(0);
 
         assertEquals("Mexico 0 - Argentina 0", firstGameInSummary.toString());
     }
@@ -95,7 +95,7 @@ public class GameServiceTest {
     void shouldNotUpdateNotStartedGame() {
         GameModel game = new GameModel(new TeamModel("Mexico"), new TeamModel("Argentina"));
 
-        assertThrows(IllegalArgumentException.class, () -> gameService.updateGame(game, 2, 1));
+        assertThrows(IllegalArgumentException.class, () -> gameService.updateGame(game.getId(), 2, 1));
     }
 
     @Test
@@ -110,8 +110,8 @@ public class GameServiceTest {
         Thread.sleep(1);
         gameService.startGame(game3);
 
-        gameService.updateGame(game2, 2, 1);
-        gameService.updateGame(game3, 1, 2);
+        gameService.updateGame(game2.getId(), 2, 1);
+        gameService.updateGame(game3.getId(), 1, 2);
 
         List<GameModel> summary = gameService.getSummary();
 
@@ -124,7 +124,7 @@ public class GameServiceTest {
     void shouldNotFinishNotStartedGame() {
         GameModel game = new GameModel(new TeamModel("Mexico"), new TeamModel("Argentina"));
 
-        assertThrows(IllegalArgumentException.class, () -> gameService.finishGame(game));
+        assertThrows(IllegalArgumentException.class, () -> gameService.finishGame(game.getId()));
     }
 
     @Test
@@ -132,9 +132,9 @@ public class GameServiceTest {
         GameModel game = new GameModel(new TeamModel("Mexico"), new TeamModel("Argentina"));
 
         gameService.startGame(game);
-        gameService.updateGame(game, 2, 1);
+        gameService.updateGame(game.getId(), 2, 1);
 
-        assertThrows(IllegalArgumentException.class, () -> gameService.updateGame(game, 1, 1));
+        assertThrows(IllegalArgumentException.class, () -> gameService.updateGame(game.getId(), 1, 1));
     }
 
     @Test
@@ -142,9 +142,9 @@ public class GameServiceTest {
         GameModel game = new GameModel(new TeamModel("Mexico"), new TeamModel("Argentina"));
 
         gameService.startGame(game);
-        gameService.updateGame(game, 2, 2);
+        gameService.updateGame(game.getId(), 2, 2);
 
-        assertDoesNotThrow(() -> gameService.updateGame(game, 2, 2));
+        assertDoesNotThrow(() -> gameService.updateGame(game.getId(), 2, 2));
     }
 
     @Test

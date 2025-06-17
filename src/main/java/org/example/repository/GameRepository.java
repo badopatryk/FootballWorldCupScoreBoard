@@ -8,10 +8,10 @@ import java.util.Optional;
 public interface GameRepository {
     void save(GameModel game);
 
-    void remove(GameModel game);
+    void remove(int gameId);
 
     Optional<GameModel> findByIndex(int index);
-    Optional<GameModel> find(GameModel game);
+    Optional<GameModel> find(int gameId);
 
     List<GameModel> findAll();
     List<GameModel> getAllGamesSortedByScoreAndTimestamp();

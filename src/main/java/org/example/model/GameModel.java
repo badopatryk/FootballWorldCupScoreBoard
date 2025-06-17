@@ -4,16 +4,21 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
 public class GameModel {
+    private static final AtomicInteger count = new AtomicInteger(0);
+    private final int id;
     private final TeamModel homeTeam;
     private final TeamModel awayTeam;
     private int homeTeamGoals;
     private int awayTeamGoals;
     private LocalDateTime timestamp;
 
+
     public GameModel(TeamModel homeTeam, TeamModel awayTeam) {
+        this.id = count.incrementAndGet();
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.homeTeamGoals = 0;
